@@ -9,7 +9,7 @@ Allows administrators to globally disable comments on their site. Comments can b
 
 == Description ==
 
-This plugin allows administrators to globally disable comments on any post types (posts, pages, attachments, etc.) so that these settings cannot be overridden for individual posts.
+This plugin allows administrators to globally disable comments on any post types (posts, pages, attachments, etc.) so that these settings cannot be overridden for individual posts. It also removes all comment-related fields from edit and quick-edit screens.
 
 It requires PHP version 5 or greater.
 
