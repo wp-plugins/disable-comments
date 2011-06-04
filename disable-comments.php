@@ -49,6 +49,7 @@ class Disable_Comments {
 		if ( isset( $_POST['submit'] ) ) {
 			$this->disabled_types = empty( $_POST['disabled_types'] ) ? array() : (array) $_POST['disabled_types'];	
 			update_option( 'disable_comments_post_types', $this->disabled_types );
+			echo '<div id="message" class="updated fade"><p>Options updated.</p></div>';
 		}
 			
 	?>
@@ -71,6 +72,13 @@ class Disable_Comments {
 	<p class="submit"><input class="button-primary" type="submit" name="submit" value="Update settings" /></p>
 	</form>
 	</div>
+	<script type="text/javascript">
+	jQuery(document).ready(function($){
+		$("#disable-comments input").change(function(){
+			$("#message").slideUp('slow');
+		});
+	});
+	</script>
 <?php
 	}
 }
