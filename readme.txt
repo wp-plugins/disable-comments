@@ -13,7 +13,7 @@ This plugin allows administrators to globally disable comments on any post types
 
 It requires PHP version 5 or greater.
 
-If you come across any bugs or have suggestions, please contact me at [rayofsolaris.net](http://rayofsolaris.net).
+If you come across any bugs or have suggestions, please contact me at [rayofsolaris.net](http://rayofsolaris.net). Please check the [FAQs](http://rayofsolaris.net/code/disable-comments-for-wordpress#faq) for common issues.
 
 == Changelog ==
 
