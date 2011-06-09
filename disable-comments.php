@@ -3,7 +3,7 @@
 Plugin Name: Disable Comments
 Plugin URI: http://rayofsolaris.net/code/disable-comments-for-wordpress
 Description: Allows administrators to disable comments on their site, globally or for certain post types.
-Version: 0.1
+Version: 0.2
 Author: Samir Shah
 Author URI: http://rayofsolaris.net/
 License: GPL2
@@ -20,6 +20,7 @@ class Disable_Comments {
 		if( $this->disabled_types = get_option( 'disable_comments_post_types', array() ) ) {
 			add_action( 'wp_loaded', array( $this, 'remove_comment_support' ) );
 			add_filter( 'comments_open', array( $this, 'filter_comment_status' ), 20, 2 );
+			add_filter( 'pings_open', array( $this, 'filter_comment_status' ), 20, 2 );
 		}
 		
 		if( is_admin() )
@@ -65,7 +66,7 @@ class Disable_Comments {
 	</ul>
 	<p>Note:</p>
 	<ul class="indent" style="list-style: disc">
-	<li>Disabling comments will also disable trackbacks and pingbacks</li>
+	<li>Disabling comments will also disable trackbacks and pingbacks.</li>
 	<li>Disabling comments will also hide all comment-related fields from the edit/quick-edit screens of the affected posts.</li>
 	<li>This plugin does not modify the comment status of individual posts in the database. If you uninstall the plugin, the comment status of affected posts will return to whatever it was before. This means you can use this plugin to temporarily disable comments without permananetly altering individual posts' comment statuses.</li>
 	</ul>
