@@ -9,7 +9,7 @@ Author URI: http://rayofsolaris.net/
 License: GPL2
 */
 
-if( ! defined( 'ABSPATH' ) )
+if( !defined( 'ABSPATH' ) )
 	exit;
 
 class Disable_Comments {
