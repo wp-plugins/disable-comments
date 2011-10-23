@@ -19,6 +19,9 @@ If you come across any bugs or have suggestions, please contact me at [rayofsola
 
 == Changelog ==
 
+= 0.3.1 =
+* Compatibility fix for WordPress 3.3
+
 = 0.3 =
 * Added the ability to remove links to comment admin pages from the Dashboard, Admin Bar and Admin Menu
 

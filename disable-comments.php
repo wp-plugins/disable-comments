@@ -3,7 +3,7 @@
 Plugin Name: Disable Comments
 Plugin URI: http://rayofsolaris.net/code/disable-comments-for-wordpress
 Description: Allows administrators to globally disable comments on their site. Comments can be disabled according to post type.
-Version: 0.3
+Version: 0.3.1
 Author: Samir Shah
 Author URI: http://rayofsolaris.net/
 License: GPL2
@@ -34,11 +34,7 @@ class Disable_Comments {
 	}
 	
 	function setup_filters(){
-		if( empty( $this->options['disabled_post_types'] ) ) {
-			if( is_admin() )
-				add_action( 'admin_notices', array( $this, 'setup_notice' ) );
-		}
-		else {
+		if( !empty( $this->options['disabled_post_types'] ) ) {
 			foreach( $this->options['disabled_post_types'] as $type ) {
 				remove_post_type_support( $type, 'comments' );
 				remove_post_type_support( $type, 'trackbacks' );
@@ -46,9 +42,14 @@ class Disable_Comments {
 			add_filter( 'comments_open', array( $this, 'filter_comment_status' ), 20, 2 );
 			add_filter( 'pings_open', array( $this, 'filter_comment_status' ), 20, 2 );
 		}
+		elseif( is_admin() ) {
+			add_action( 'admin_notices', array( $this, 'setup_notice' ) );
+		}
 		
-		if( $this->options['remove_admin_bar_comments'] && is_admin_bar_showing() )
-			remove_action( 'admin_bar_menu', 'wp_admin_bar_comments_menu', 50 );
+		if( $this->options['remove_admin_bar_comments'] && is_admin_bar_showing() ) {
+			remove_action( 'admin_bar_menu', 'wp_admin_bar_comments_menu', 50 );	// WP<3.3
+			remove_action( 'admin_bar_menu', 'wp_admin_bar_comments_menu', 60 );	// WP 3.3
+		}
 		
 		if( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'settings_menu' ) );
@@ -118,7 +119,7 @@ class Disable_Comments {
 		<li><input type="checkbox" name="remove_admin_menu_comments" id="remove_admin_menu_comments" <?php checked( $this->options['remove_admin_menu_comments'] );?>> <label for="remove_admin_menu_comments">Remove the "Comments" link from the Admin Menu</label></li>
 		<li><input type="checkbox" name="remove_admin_bar_comments" id="remove_admin_bar_comments" <?php checked( $this->options['remove_admin_bar_comments'] );?>> <label for="remove_admin_bar_comments">Remove the "Comments" link from the Admin Bar</label></li>
 		<li><input type="checkbox" name="remove_recent_comments" id="remove_recent_comments" <?php checked( $this->options['remove_recent_comments'] );?>> <label for="remove_recent_comments">Remove the "Recent Comments" widget from the Dashboard</label></li>
-		<li><input type="checkbox" name="remove_discussion" id="remove_discussion" <?php checked( $this->options['remove_discussion'] );?>> <label for="remove_discussion">Remove the "Discussion" section from the "Right Now" widget on the Dashboard</label></li>
+		<li><input type="checkbox" name="remove_discussion" id="remove_discussion" <?php checked( $this->options['remove_discussion'] );?>> <label for="remove_discussion">Remove the "Discussion" section from the Right Now widget on the Dashboard</label></li>
 	</ul>
 	<p><strong>Note:</strong> these options are global. They will affect all users, everywhere, regardless of whether comments are enabled on portions of your site. Use them only if you want to remove all references to comments <em>everywhere</em>.
 	<p class="submit"><input class="button-primary" type="submit" name="submit" value="Update settings" /></p>
