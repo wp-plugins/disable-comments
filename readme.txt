@@ -19,6 +19,9 @@ If you come across any bugs or have suggestions, please contact me at [rayofsola
 
 == Changelog ==
 
+= 0.3.2 =
+* Bugfix: Some dashboard items were incorrectly hidden in multisite
+
 = 0.3.1 =
 * Compatibility fix for WordPress 3.3
 

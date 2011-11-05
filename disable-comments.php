@@ -3,7 +3,7 @@
 Plugin Name: Disable Comments
 Plugin URI: http://rayofsolaris.net/code/disable-comments-for-wordpress
 Description: Allows administrators to globally disable comments on their site. Comments can be disabled according to post type.
-Version: 0.3.1
+Version: 0.3.2
 Author: Samir Shah
 Author URI: http://rayofsolaris.net/
 License: GPL2
@@ -81,7 +81,13 @@ class Disable_Comments {
 	}
 	
 	function hide_discussion_rightnow(){
-		echo '<style>#dashboard_right_now .table_discussion {display: none}</style>';
+		if( 'dashboard' == get_current_screen()->id )
+			add_action( 'admin_print_footer_scripts', array( $this, 'discussion_js' ) );
+	}
+	
+	function discussion_js(){
+		// getting hold of the discussion box is tricky. The table_discussion class is used for other things in multisite
+		echo '<script> jQuery(document).ready(function($){ $("#dashboard_right_now .table_discussion").has(\'a[href="edit-comments.php"]\').first().hide(); }); </script>';
 	}
 	
 	function filter_comment_status( $open, $post_id ) {
@@ -119,7 +125,7 @@ class Disable_Comments {
 		<li><input type="checkbox" name="remove_admin_menu_comments" id="remove_admin_menu_comments" <?php checked( $this->options['remove_admin_menu_comments'] );?>> <label for="remove_admin_menu_comments">Remove the "Comments" link from the Admin Menu</label></li>
 		<li><input type="checkbox" name="remove_admin_bar_comments" id="remove_admin_bar_comments" <?php checked( $this->options['remove_admin_bar_comments'] );?>> <label for="remove_admin_bar_comments">Remove the "Comments" link from the Admin Bar</label></li>
 		<li><input type="checkbox" name="remove_recent_comments" id="remove_recent_comments" <?php checked( $this->options['remove_recent_comments'] );?>> <label for="remove_recent_comments">Remove the "Recent Comments" widget from the Dashboard</label></li>
-		<li><input type="checkbox" name="remove_discussion" id="remove_discussion" <?php checked( $this->options['remove_discussion'] );?>> <label for="remove_discussion">Remove the "Discussion" section from the Right Now widget on the Dashboard</label></li>
+		<li><input type="checkbox" name="remove_discussion" id="remove_discussion" <?php checked( $this->options['remove_discussion'] );?>> <label for="remove_discussion">Remove the "Discussion" section from the Right Now widget on the Dashboard <span class="hide-if-js"><strong>(Note: this option will only work if you have Javascript enabled in your browser)</strong><span></label></li>
 	</ul>
 	<p><strong>Note:</strong> these options are global. They will affect all users, everywhere, regardless of whether comments are enabled on portions of your site. Use them only if you want to remove all references to comments <em>everywhere</em>.
 	<p class="submit"><input class="button-primary" type="submit" name="submit" value="Update settings" /></p>
