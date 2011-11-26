@@ -19,6 +19,10 @@ If you come across any bugs or have suggestions, please contact me at [rayofsola
 
 == Changelog ==
 
+= 0.3.3 =
+* Bugfix: Custom post types which don't support comments shouldn't appear on the settings page
+* Add warning notice to Discussion settings when comments are disabled
+
 = 0.3.2 =
 * Bugfix: Some dashboard items were incorrectly hidden in multisite
 
