@@ -1,6 +1,6 @@
 === Disable Comments ===
 Contributors: solarissmoke
-Tags: comments, disable
+Tags: comments, disable, global
 Requires at least: 3.1
 Tested up to: 3.3
 Stable tag: trunk
