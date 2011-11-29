@@ -19,6 +19,9 @@ If you come across any bugs or have suggestions, please contact me at [rayofsola
 
 == Changelog ==
 
+= 0.3.4 =
+* Bugfix: A typo on the settings page meant that the submit button went missing on some browsers. Thanks to Wojtek for reporting this.
+
 = 0.3.3 =
 * Bugfix: Custom post types which don't support comments shouldn't appear on the settings page
 * Add warning notice to Discussion settings when comments are disabled

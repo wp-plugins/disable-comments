@@ -3,7 +3,7 @@
 Plugin Name: Disable Comments
 Plugin URI: http://rayofsolaris.net/code/disable-comments-for-wordpress
 Description: Allows administrators to globally disable comments on their site. Comments can be disabled according to post type.
-Version: 0.3.3
+Version: 0.3.4
 Author: Samir Shah
 Author URI: http://rayofsolaris.net/
 License: GPL2
@@ -150,7 +150,7 @@ jQuery(document).ready(function($){
 		<li><label for="remove_admin_menu_comments"><input type="checkbox" name="remove_admin_menu_comments" id="remove_admin_menu_comments" <?php checked( $this->options['remove_admin_menu_comments'] );?>> Remove the "Comments" link from the Admin Menu</label></li>
 		<li><label for="remove_admin_bar_comments"><input type="checkbox" name="remove_admin_bar_comments" id="remove_admin_bar_comments" <?php checked( $this->options['remove_admin_bar_comments'] );?>> Remove the "Comments" icon from the Admin Bar</label></li>
 		<li><label for="remove_recent_comments"><input type="checkbox" name="remove_recent_comments" id="remove_recent_comments" <?php checked( $this->options['remove_recent_comments'] );?>> Remove the "Recent Comments" widget from the Dashboard</label></li>
-		<li><label for="remove_discussion"><input type="checkbox" name="remove_discussion" id="remove_discussion" <?php checked( $this->options['remove_discussion'] );?>> Remove the "Discussion" section from the Right Now widget on the Dashboard <span class="hide-if-js"><strong>(Note: this option will only work if you have Javascript enabled in your browser)</strong><span></label></li>
+		<li><label for="remove_discussion"><input type="checkbox" name="remove_discussion" id="remove_discussion" <?php checked( $this->options['remove_discussion'] );?>> Remove the "Discussion" section from the Right Now widget on the Dashboard <span class="hide-if-js"><strong>(Note: this option will only work if you have Javascript enabled in your browser)</strong></span></label></li>
 	</ul>
 	<p><strong>Note:</strong> these options are global. They will affect all users, everywhere, regardless of whether comments are enabled on portions of your site. Use them only if you want to remove all references to comments <em>everywhere</em>.
 	<p class="submit"><input class="button-primary" type="submit" name="submit" value="Update settings"></p>
