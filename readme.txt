@@ -19,6 +19,9 @@ If you come across any bugs or have suggestions, please contact me at [rayofsola
 
 == Changelog ==
 
+= 0.3.5 =
+* Bugfix: Other admin menu items could inadvertently be hidden when 'Remove the "Comments" link from the Admin Menu' was selected.
+
 = 0.3.4 =
 * Bugfix: A typo on the settings page meant that the submit button went missing on some browsers. Thanks to Wojtek for reporting this.
 
