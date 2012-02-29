@@ -1,7 +1,7 @@
 === Disable Comments ===
 Contributors: solarissmoke
 Tags: comments, disable, global
-Requires at least: 3.1
+Requires at least: 3.2
 Tested up to: 3.3
 Stable tag: trunk
 
@@ -13,11 +13,13 @@ This plugin allows administrators to globally disable comments on any post types
 
 Use this plugin if you don't want comments at all on your site (or on certain post types). Don't use it if you want to selectively disable comments on individual posts - WordPress lets you do that anyway.
 
-It requires PHP version 5 or greater.
-
 If you come across any bugs or have suggestions, please contact me at [rayofsolaris.net](http://rayofsolaris.net). Please check the [FAQs](http://rayofsolaris.net/code/disable-comments-for-wordpress#faq) for common issues.
 
 == Changelog ==
+
+= 0.4 =
+* Added the option to disable the Recent Comments template widget.
+* Bugfix: don't show admin messages to users who don't can't do anything about them.
 
 = 0.3.5 =
 * Bugfix: Other admin menu items could inadvertently be hidden when 'Remove the "Comments" link from the Admin Menu' was selected.

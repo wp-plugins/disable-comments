@@ -3,7 +3,7 @@
 Plugin Name: Disable Comments
 Plugin URI: http://rayofsolaris.net/code/disable-comments-for-wordpress
 Description: Allows administrators to globally disable comments on their site. Comments can be disabled according to post type.
-Version: 0.3.5
+Version: 0.4
 Author: Samir Shah
 Author URI: http://rayofsolaris.net/
 License: GPL2
@@ -13,7 +13,7 @@ if( !defined( 'ABSPATH' ) )
 	exit;
 
 class Disable_Comments {
-	const db_version = 2;
+	const db_version = 3;
 	private $options;
 	private $modified_types = array();
 	
@@ -21,16 +21,28 @@ class Disable_Comments {
 		// load options
 		$this->options = get_option( 'disable_comments_options', array() );
 		
-		if( !isset( $this->options['db_version'] ) || $this->options['db_version'] < self::db_version ) {
-			// upgrade options from version 0.2.1 or earlier to 0.3
-			$this->options['disabled_post_types'] = get_option( 'disable_comments_post_types', array() );
-			delete_option( 'disable_comments_post_types' );
-			foreach( array( 'remove_admin_menu_comments', 'remove_admin_bar_comments', 'remove_recent_comments', 'remove_discussion' ) as $v )
-				$this->options[$v] = false;
+		$old_ver = isset( $this->options['db_version'] ) ? $this->options['db_version'] : 0;
+		if( $old_ver < self::db_version ) {
+			if( $old_ver < 2 ) {
+				// upgrade options from version 0.2.1 or earlier to 0.3
+				$this->options['disabled_post_types'] = get_option( 'disable_comments_post_types', array() );
+				delete_option( 'disable_comments_post_types' );
+			}
+
+			foreach( array( 'remove_admin_menu_comments', 'remove_admin_bar_comments', 'remove_recent_comments', 'remove_discussion', 'remove_rc_widget' ) as $v )
+				if( !isset( $this->options[$v] ) )
+					$this->options[$v] = false;
+
 			$this->options['db_version'] = self::db_version;
 			update_option( 'disable_comments_options', $this->options );
 		}
 		
+		// these need to happen now
+		if( $this->options['remove_rc_widget'] ) {
+			add_action( 'widgets_init', array( $this, 'disable_rc_widget' ) );
+		}
+		
+		// these can happen later
 		add_action( 'wp_loaded', array( $this, 'setup_filters' ) );	
 	}
 	
@@ -87,7 +99,7 @@ jQuery(document).ready(function($){
 	}
 	
 	function setup_notice(){
-		if( !strpos($_SERVER['REQUEST_URI'], 'options-general.php?page=disable_comments_settings') )
+		if( current_user_can( 'manage_options' ) && get_current_screen()->id != 'settings_page_disable_comments_settings' )
 			echo '<div class="updated fade"><p>The <em>Disable Comments</em> plugin is active, but isn\'t configured to do anything yet. Visit the <a href="options-general.php?page=disable_comments_settings">configuration page</a> to choose which post types to disable comments on.</p></div>';
 	}
 	
@@ -116,6 +128,10 @@ jQuery(document).ready(function($){
 		return in_array( $post->post_type, $this->options['disabled_post_types'] ) ? false : $open;
 	}
 	
+	function disable_rc_widget() {
+		unregister_widget( 'WP_Widget_Recent_Comments' );
+	}
+	
 	function settings_menu() {
 		add_submenu_page('options-general.php', 'Disable Comments', 'Disable Comments', 'manage_options', 'disable_comments_settings', array( $this, 'settings_page' ) );
 	}
@@ -129,7 +145,7 @@ jQuery(document).ready(function($){
 		
 		if ( isset( $_POST['submit'] ) ) {
 			$this->options['disabled_post_types'] = empty( $_POST['disabled_types'] ) ? array() : (array) $_POST['disabled_types'];	
-			foreach( array( 'remove_admin_menu_comments', 'remove_admin_bar_comments', 'remove_recent_comments', 'remove_discussion' ) as $v )
+			foreach( array( 'remove_admin_menu_comments', 'remove_admin_bar_comments', 'remove_recent_comments', 'remove_discussion', 'remove_rc_widget' ) as $v )
 				$this->options[$v] = !empty( $_POST[$v] );	
 			update_option( 'disable_comments_options', $this->options );
 			echo '<div id="message" class="updated fade"><p>Options updated. Changes to the Admin Menu and Admin Bar will not appear until you leave or reload this page.</p></div>';
@@ -149,8 +165,9 @@ jQuery(document).ready(function($){
 	<ul class="indent">
 		<li><label for="remove_admin_menu_comments"><input type="checkbox" name="remove_admin_menu_comments" id="remove_admin_menu_comments" <?php checked( $this->options['remove_admin_menu_comments'] );?>> Remove the "Comments" link from the Admin Menu</label></li>
 		<li><label for="remove_admin_bar_comments"><input type="checkbox" name="remove_admin_bar_comments" id="remove_admin_bar_comments" <?php checked( $this->options['remove_admin_bar_comments'] );?>> Remove the "Comments" icon from the Admin Bar</label></li>
-		<li><label for="remove_recent_comments"><input type="checkbox" name="remove_recent_comments" id="remove_recent_comments" <?php checked( $this->options['remove_recent_comments'] );?>> Remove the "Recent Comments" widget from the Dashboard</label></li>
-		<li><label for="remove_discussion"><input type="checkbox" name="remove_discussion" id="remove_discussion" <?php checked( $this->options['remove_discussion'] );?>> Remove the "Discussion" section from the Right Now widget on the Dashboard <span class="hide-if-js"><strong>(Note: this option will only work if you have Javascript enabled in your browser)</strong></span></label></li>
+		<li><label for="remove_recent_comments"><input type="checkbox" name="remove_recent_comments" id="remove_recent_comments" <?php checked( $this->options['remove_recent_comments'] );?>> Disable the "Recent Comments" Dashboard widget</label></li>
+		<li><label for="remove_rc_widget"><input type="checkbox" name="remove_rc_widget" id="remove_rc_widget" <?php checked( $this->options['remove_rc_widget'] );?>> Disable the "Recent Comments" template widget (this prevents the widget from being available in <code>Appearance -> Widgets</code> and from being used by your theme)</label></li>
+		<li><label for="remove_discussion"><input type="checkbox" name="remove_discussion" id="remove_discussion" <?php checked( $this->options['remove_discussion'] );?>> Remove the "Discussion" section from the "Right Now" Dashboard widget <span class="hide-if-js"><strong>(Note: this option will only work if you have Javascript enabled in your browser)</strong></span></label></li>
 	</ul>
 	<p><strong>Note:</strong> these options are global. They will affect all users, everywhere, regardless of whether comments are enabled on portions of your site. Use them only if you want to remove all references to comments <em>everywhere</em>.
 	<p class="submit"><input class="button-primary" type="submit" name="submit" value="Update settings"></p>
