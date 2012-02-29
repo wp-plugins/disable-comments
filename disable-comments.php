@@ -38,9 +38,8 @@ class Disable_Comments {
 		}
 		
 		// these need to happen now
-		if( $this->options['remove_rc_widget'] ) {
+		if( $this->options['remove_rc_widget'] )
 			add_action( 'widgets_init', array( $this, 'disable_rc_widget' ) );
-		}
 		
 		// these can happen later
 		add_action( 'wp_loaded', array( $this, 'setup_filters' ) );	
