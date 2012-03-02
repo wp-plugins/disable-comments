@@ -143,7 +143,8 @@ jQuery(document).ready(function($){
 		}
 		
 		if ( isset( $_POST['submit'] ) ) {
-			$this->options['disabled_post_types'] = empty( $_POST['disabled_types'] ) ? array() : (array) $_POST['disabled_types'];	
+			$disabled_post_types =  empty( $_POST['disabled_types'] ) ? array() : (array) $_POST['disabled_types'];
+			$this->options['disabled_post_types'] = array_intersect( $disabled_post_types, array_keys( $types ) );	
 			foreach( array( 'remove_admin_menu_comments', 'remove_admin_bar_comments', 'remove_recent_comments', 'remove_discussion', 'remove_rc_widget' ) as $v )
 				$this->options[$v] = !empty( $_POST[$v] );	
 			update_option( 'disable_comments_options', $this->options );
