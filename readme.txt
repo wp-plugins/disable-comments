@@ -3,7 +3,7 @@ Contributors: solarissmoke
 Tags: comments, disable, global
 Requires at least: 3.2
 Tested up to: 3.3
-Stable tag: trunk
+Stable tag: 0.4
 
 Allows administrators to globally disable comments on their site. Comments can be disabled according to post type.
 
