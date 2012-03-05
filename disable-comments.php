@@ -3,7 +3,7 @@
 Plugin Name: Disable Comments
 Plugin URI: http://rayofsolaris.net/code/disable-comments-for-wordpress
 Description: Allows administrators to globally disable comments on their site. Comments can be disabled according to post type.
-Version: 0.4
+Version: 0.4.1
 Author: Samir Shah
 Author URI: http://rayofsolaris.net/
 License: GPL2
@@ -70,6 +70,8 @@ class Disable_Comments {
 		if( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'settings_menu' ) );
 			add_action( 'admin_print_footer_scripts', array( $this, 'discussion_notice' ) );
+			add_action( 'edit_form_advanced', array( $this, 'edit_form_inputs' ) );
+			add_action( 'edit_page_form', array( $this, 'edit_form_inputs' ) );
 			
 			if( $this->options['remove_admin_menu_comments'] )
 				add_action( 'admin_menu', array( $this, 'filter_admin_menu' ), 9999 );	// do this as late as possible
@@ -79,6 +81,14 @@ class Disable_Comments {
 				
 			if( $this->options['remove_recent_comments'] )
 				add_action( 'wp_dashboard_setup', array( $this, 'filter_dashboard' ) );
+		}
+	}
+	
+	function edit_form_inputs() {
+		global $post;
+		// Without a dicussion meta box, comment_status will be set to closed on new/updated posts
+		if( in_array( $post->post_type, $this->modified_types ) ) {
+			echo '<input type="hidden" name="comment_status" value="' . $post->comment_status . '" /><input type="hidden" name="ping_status" value="' . $post->ping_status . '" />';
 		}
 	}
 	
