@@ -17,6 +17,9 @@ If you come across any bugs or have suggestions, please contact me at [rayofsola
 
 == Changelog ==
 
+= 0.5 =
+* Allow temporary disabling of comments site-wide by ensuring that original comment statuses are not overwritten when a post is edited.
+
 = 0.4 =
 * Added the option to disable the Recent Comments template widget.
 * Bugfix: don't show admin messages to users who don't can't do anything about them.
