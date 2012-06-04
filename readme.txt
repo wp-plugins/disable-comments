@@ -13,7 +13,7 @@ This plugin allows administrators to globally disable comments on any post type 
 
 Additionally, comment-related items can be removed from the Dashboard, Widgets, the Admin Menu and the Admin Bar.
 
-**Important note**: Use this plugin if you don't want comments at all on your site (or on certain post types). Don't use it if you want to selectively disable comments on individual posts — WordPress lets you do that anyway. If you don't know how to disable comments on individual posts, read [this FAQ](http://rayofsolaris.net/code/disable-comments-for-wordpress#faq-indiv-comments).
+**Important note**: Use this plugin if you don't want comments at all on your site (or on certain post types). Don't use it if you want to selectively disable comments on individual posts - WordPress lets you do that anyway. If you don't know how to disable comments on individual posts, read [this FAQ](http://rayofsolaris.net/code/disable-comments-for-wordpress#faq-indiv-comments).
 
 If you come across any bugs or have suggestions, please contact me at [rayofsolaris.net](http://rayofsolaris.net). Please check the [FAQs](http://rayofsolaris.net/code/disable-comments-for-wordpress#faq) for common issues.
 
