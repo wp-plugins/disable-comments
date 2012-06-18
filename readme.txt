@@ -1,5 +1,6 @@
 === Disable Comments ===
 Contributors: solarissmoke
+Donate link: http://rayofsolaris.net/donate.php
 Tags: comments, disable, global
 Requires at least: 3.2
 Tested up to: 3.4
