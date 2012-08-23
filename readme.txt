@@ -20,7 +20,7 @@ If you come across any bugs or have suggestions, please use the plugin support f
 
 == Frequently Asked Questions ==
 
-= Nothing happens after I disable comments on all posts — comment forms still appear when I view my posts. =
+= Nothing happens after I disable comments on all posts - comment forms still appear when I view my posts. =
 
 **Before you report this as a bug, please do this simple test**: switch to the default WordPress theme (Twenty Eleven) and see whether the problem persists. If it works with the default theme, then the problem is there because your theme isn't using the correct procedure to check whether comments are open or closed on posts, and there is nothing I can do about that.
 
@@ -36,7 +36,7 @@ If your theme still displays the message, you will have to edit its files manual
 
 For starters, don't install this plugin!
 
-Go to the edit page for the post you want to disable comments on. Scroll down to the "Discussion" box, where you will find the comment options for that post. If you don’t see a "Discussion" box, then click on "Screen Options" at the top of your screen, and make sure the "Discussion" checkbox is checked.
+Go to the edit page for the post you want to disable comments on. Scroll down to the "Discussion" box, where you will find the comment options for that post. If you don't see a "Discussion" box, then click on "Screen Options" at the top of your screen, and make sure the "Discussion" checkbox is checked.
 
 You can also bulk-edit the comment status of multiple posts from the [posts screen](http://codex.wordpress.org/Posts_Screen).
 
