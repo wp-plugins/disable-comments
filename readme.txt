@@ -14,9 +14,37 @@ This plugin allows administrators to globally disable comments on any post type 
 
 Additionally, comment-related items can be removed from the Dashboard, Widgets, the Admin Menu and the Admin Bar.
 
-**Important note**: Use this plugin if you don't want comments at all on your site (or on certain post types). Don't use it if you want to selectively disable comments on individual posts - WordPress lets you do that anyway. If you don't know how to disable comments on individual posts, read [this FAQ](http://rayofsolaris.net/code/disable-comments-for-wordpress#faq-indiv-comments).
+**Important note**: Use this plugin if you don't want comments at all on your site (or on certain post types). Don't use it if you want to selectively disable comments on individual posts - WordPress lets you do that anyway. If you don't know how to disable comments on individual posts, there are instructions in [the FAQ](http://wordpress.org/extend/plugins/disable-comments/faq/).
 
-If you come across any bugs or have suggestions, please contact me at [rayofsolaris.net](http://rayofsolaris.net). Please check the [FAQs](http://rayofsolaris.net/code/disable-comments-for-wordpress#faq) for common issues.
+If you come across any bugs or have suggestions, please use the plugin support forum or contact me at [rayofsolaris.net](http://rayofsolaris.net). I can't fix it if I don't know it's broken! Please check the [FAQ](http://wordpress.org/extend/plugins/disable-comments/faq/) for common issues.
+
+== Frequently Asked Questions ==
+
+= Nothing happens after I disable comments on all posts — comment forms still appear when I view my posts. =
+
+**Before you report this as a bug, please do this simple test**: switch to the default WordPress theme (Twenty Eleven) and see whether the problem persists. If it works with the default theme, then the problem is there because your theme isn't using the correct procedure to check whether comments are open or closed on posts, and there is nothing I can do about that.
+
+You may like to point your theme's author to [this explanation](http://rayofsolaris.net/blog/2012/how-to-check-if-comments-are-allowed-in-wordpress) of what they are doing wrong, and how to fix it. Alternatively you can modify your theme's code yourself.
+
+= How can I remove the text that says "comments are closed" at the bottom of articles where comments are disabled? =
+
+With most newer themes (including Wordpress' bundled themes), this message will not appear when you use this plugin, because the plugin notifies them that comments are not just disabled, but unsupported.
+
+If your theme still displays the message, you will have to edit its files manually to remove it. Two common approaches are to either delete or comment out the relevant lines in `wp-content/your-theme/comments.php`, or to add a declaration to `wp-content/your-theme/style.css` that hides the message from your visitors. In either case, make you you know what you are doing!
+
+= I only want to disable comments on certain posts, not globally. What do I do? =
+
+For starters, don't install this plugin!
+
+Go to the edit page for the post you want to disable comments on. Scroll down to the "Discussion" box, where you will find the comment options for that post. If you don’t see a "Discussion" box, then click on "Screen Options" at the top of your screen, and make sure the "Discussion" checkbox is checked.
+
+You can also bulk-edit the comment status of multiple posts from the [posts screen](http://codex.wordpress.org/Posts_Screen).
+
+= What happens to the comment status of my posts if I disable the plugin? =
+
+The plugin does not modify the original comment status of your posts, so they will revert to whatever status they had before you activated the plugin. Posts that were created after activating the plugin will revert to the default comment status (set in `Settings -> Discussion -> Default article settings`) at the time the post was created.
+
+This means that the plugin can be used to temporarily disable comments across your site without making permanent changes to individual posts. 
 
 == Changelog ==
 
@@ -57,4 +85,3 @@ If you come across any bugs or have suggestions, please contact me at [rayofsola
 1. Upload the plugin folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. The plugin settings can be accessed via the 'Settings' menu in the administration area
- 
