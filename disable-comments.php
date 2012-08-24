@@ -3,7 +3,7 @@
 Plugin Name: Disable Comments
 Plugin URI: http://wordpress.org/extend/plugins/disable-comments/
 Description: Allows administrators to globally disable comments on their site. Comments can be disabled according to post type.
-Version: 0.5
+Version: 0.6
 Author: Samir Shah
 Author URI: http://rayofsolaris.net/
 License: GPL2
@@ -13,7 +13,7 @@ if( !defined( 'ABSPATH' ) )
 	exit;
 
 class Disable_Comments {
-	const db_version = 3;
+	const db_version = 4;
 	private $options;
 	private $modified_types = array();
 	
@@ -29,7 +29,7 @@ class Disable_Comments {
 				delete_option( 'disable_comments_post_types' );
 			}
 
-			foreach( array( 'remove_admin_menu_comments', 'remove_admin_bar_comments', 'remove_recent_comments', 'remove_discussion', 'remove_rc_widget' ) as $v )
+			foreach( array( 'remove_admin_menu_comments', 'remove_admin_bar_comments', 'remove_recent_comments', 'remove_discussion', 'remove_rc_widget', 'permanent' ) as $v )
 				if( !isset( $this->options[$v] ) )
 					$this->options[$v] = false;
 
@@ -154,9 +154,15 @@ jQuery(document).ready(function($){
 		
 		if ( isset( $_POST['submit'] ) ) {
 			$disabled_post_types =  empty( $_POST['disabled_types'] ) ? array() : (array) $_POST['disabled_types'];
-			$this->options['disabled_post_types'] = array_intersect( $disabled_post_types, array_keys( $types ) );	
-			foreach( array( 'remove_admin_menu_comments', 'remove_admin_bar_comments', 'remove_recent_comments', 'remove_discussion', 'remove_rc_widget' ) as $v )
+			$disabled_post_types = array_intersect( $disabled_post_types, array_keys( $types ) );	
+			// entering permanent mode, or post types have changed
+			if( !empty( $_POST['permanent'] ) && ( !$this->options['permanent'] || $disabled_post_types != $this->options['disabled_post_types'] ) )
+				$this->enter_permanent_mode();
+			
+			$this->options['disabled_post_types'] = $disabled_post_types;
+			foreach( array( 'remove_admin_menu_comments', 'remove_admin_bar_comments', 'remove_recent_comments', 'remove_discussion', 'remove_rc_widget', 'permanent' ) as $v )
 				$this->options[$v] = !empty( $_POST[$v] );	
+			
 			update_option( 'disable_comments_options', $this->options );
 			echo '<div id="message" class="updated fade"><p>Options updated. Changes to the Admin Menu and Admin Bar will not appear until you leave or reload this page.</p></div>';
 		}	
@@ -180,6 +186,7 @@ jQuery(document).ready(function($){
 		<li><label for="remove_discussion"><input type="checkbox" name="remove_discussion" id="remove_discussion" <?php checked( $this->options['remove_discussion'] );?>> Remove the "Discussion" section from the "Right Now" Dashboard widget <span class="hide-if-js"><strong>(Note: this option will only work if you have Javascript enabled in your browser)</strong></span></label></li>
 	</ul>
 	<p><strong>Note:</strong> these options are global. They will affect all users, everywhere, regardless of whether comments are enabled on portions of your site. Use them only if you want to remove all references to comments <em>everywhere</em>.
+	<ul class="indent"><li><label for="permanent"><input type="checkbox" name="permanent" id="permanent" <?php checked( $this->options['permanent'] );?>> Use permanent mode (see the <a href="http://wordpress.org/extend/plugins/disable-comments/faq/" target="_blank">FAQ</a> for what this means)</a></label></li></ul>
 	<p class="submit"><input class="button-primary" type="submit" name="submit" value="Update settings"></p>
 	</form>
 	</div>
@@ -191,6 +198,16 @@ jQuery(document).ready(function($){
 	});
 	</script>
 <?php
+	}
+	
+	private function enter_permanent_mode() {
+		$types = $this->options['disabled_post_types'];
+		if( empty( $types ) )
+			return;
+			
+		global $wpdb;
+		$bits = implode( ', ', array_pad( array(), count( $types ), '%s' ) );
+		$wpdb->query( $wpdb->prepare( "UPDATE `$wpdb->posts` SET `comment_status` = 'closed' WHERE `post_type` IN ( $bits )", $types ) );
 	}
 }
 

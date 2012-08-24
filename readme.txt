@@ -3,7 +3,7 @@ Contributors: solarissmoke
 Tags: comments, disable, global
 Requires at least: 3.2
 Tested up to: 3.4
-Stable tag: 0.5
+Stable tag: trunk
 
 Allows administrators to globally disable comments on their site. Comments can be disabled according to post type.
 
@@ -21,9 +21,15 @@ If you come across any bugs or have suggestions, please use the plugin support f
 
 = Nothing happens after I disable comments on all posts - comment forms still appear when I view my posts. =
 
-**Before you report this as a bug, please do this simple test**: switch to the default WordPress theme (Twenty Eleven) and see whether the problem persists. If it works with the default theme, then the problem is there because your theme isn't using the correct procedure to check whether comments are open or closed on posts, and there is nothing I can do about that.
+This is because your theme is not checking the comment status of posts in the correct way. The solution is to switch the plugin to permanent mode (the last option on the plugin settings page).
 
-You may like to point your theme's author to [this explanation](http://rayofsolaris.net/blog/2012/how-to-check-if-comments-are-allowed-in-wordpress) of what they are doing wrong, and how to fix it. Alternatively you can modify your theme's code yourself.
+You may like to point your theme's author to [this explanation](http://rayofsolaris.net/blog/2012/how-to-check-if-comments-are-allowed-in-wordpress) of what they are doing wrong, and how to fix it.
+
+= What is "permanent mode"? =
+
+By default, the plugin does not make any permanent changes to your posts - it just dynamically closes comments on them. This means that you can use the plugin temporarily without permanently altering the comment status of all your posts. If the plugin works in this mode, then I recommend that you don't use permanent mode.
+
+Unfortunately some themes do not properly check the comment status of posts, and the plugin in default mode will have no effect with them (comments will still appear to be open). To fix this, switch to permanent mode. Note however that this will make permanent changes: comments will remain closed even if you later disable the plugin (you can always reopen them manually, of course).
 
 = How can I remove the text that says "comments are closed" at the bottom of articles where comments are disabled? =
 
@@ -46,6 +52,9 @@ The plugin does not modify the original comment status of your posts, so they wi
 This means that the plugin can be used to temporarily disable comments across your site without making permanent changes to individual posts. 
 
 == Changelog ==
+
+= 0.6 = 
+* Add "permanent mode" to deal with themes that don't use filterable comment status checking.
 
 = 0.5 =
 * Allow temporary disabling of comments site-wide by ensuring that original comment statuses are not overwritten when a post is edited.
