@@ -87,7 +87,7 @@ class Disable_Comments {
 	function edit_form_inputs() {
 		global $post;
 		// Without a dicussion meta box, comment_status will be set to closed on new/updated posts
-		if( in_array( $post->post_type, $this->modified_types ) ) {
+		if( !$this->options['permanent'] && in_array( $post->post_type, $this->modified_types ) ) {
 			echo '<input type="hidden" name="comment_status" value="' . $post->comment_status . '" /><input type="hidden" name="ping_status" value="' . $post->ping_status . '" />';
 		}
 	}
