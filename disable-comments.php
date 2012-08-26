@@ -210,7 +210,7 @@ jQuery(document).ready(function($){
 			
 		global $wpdb;
 		$bits = implode( ', ', array_pad( array(), count( $types ), '%s' ) );
-		$wpdb->query( $wpdb->prepare( "UPDATE `$wpdb->posts` SET `comment_status` = 'closed' WHERE `post_type` IN ( $bits )", $types ) );
+		$wpdb->query( $wpdb->prepare( "UPDATE `$wpdb->posts` SET `comment_status` = 'closed', ping_status = 'closed' WHERE `post_type` IN ( $bits )", $types ) );
 	}
 }
 
