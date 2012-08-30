@@ -45,12 +45,6 @@ Go to the edit page for the post you want to disable comments on. Scroll down to
 
 You can also bulk-edit the comment status of multiple posts from the [posts screen](http://codex.wordpress.org/Posts_Screen).
 
-= What happens to the comment status of my posts if I disable the plugin? =
-
-The plugin does not modify the original comment status of your posts, so they will revert to whatever status they had before you activated the plugin. Posts that were created after activating the plugin will revert to the default comment status (set in `Settings -> Discussion -> Default article settings`) at the time the post was created.
-
-This means that the plugin can be used to temporarily disable comments across your site without making permanent changes to individual posts. 
-
 == Changelog ==
 
 = 0.6 = 
