@@ -29,7 +29,7 @@ You may like to point your theme's author to [this explanation](http://rayofsola
 
 By default, the plugin does not make any permanent changes to your posts - it just dynamically closes comments on them. This means that you can use the plugin temporarily without permanently altering the comment status of all your posts. If the plugin works in this mode, then I recommend that you don't use permanent mode.
 
-Unfortunately some themes do not properly check the comment status of posts, and the plugin in default mode will have no effect with them (comments will still appear to be open). To fix this, switch to permanent mode. Note however that this will make permanent changes: comments will remain closed even if you later disable the plugin (you can always reopen them manually, of course).
+Unfortunately some themes do not properly check the comment status of posts, and the plugin in default mode will have no effect with them (comments will still appear to be open). To fix this, switch to permanent mode. Note however that this will make permanent changes: **comments will remain closed even if you later disable the plugin** (you can always reopen them manually, of course).
 
 = How can I remove the text that says "comments are closed" at the bottom of articles where comments are disabled? =
 
