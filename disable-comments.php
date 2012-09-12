@@ -21,6 +21,14 @@ class Disable_Comments {
 		// load options
 		$this->options = get_option( 'disable_comments_options', array() );
 		
+		// If it looks like first run, check compat
+		if ( empty( $this->options ) && version_compare( $GLOBALS['wp_version'], '3.2', '<' ) ) {
+			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+			deactivate_plugins( __FILE__ );
+			if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'activate' || $_GET['action'] == 'error_scrape' ) )
+				exit( 'Disable Comments requires WordPress version 3.2 or greater.' );
+		}
+		
 		$old_ver = isset( $this->options['db_version'] ) ? $this->options['db_version'] : 0;
 		if( $old_ver < self::db_version ) {
 			if( $old_ver < 2 ) {
