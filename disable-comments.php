@@ -213,14 +213,19 @@ jQuery(document).ready(function($){
 				$this->options[$v] = !empty( $_POST[$v] );	
 			
 			$this->update_options();
-			echo '<div id="message" class="updated fade"><p>Options updated. Changes to the Admin Menu and Admin Bar will not appear until you leave or reload this page.</p></div>';
+			echo '<div id="message" class="updated"><p>Options updated. Changes to the Admin Menu and Admin Bar will not appear until you leave or reload this page.' . ( WP_CACHE ? ' <strong>If a caching/performance plugin is active, please invalidate its cache to ensure that changes are reflected immediately.</strong>' : '' ) . '</p></div>';
 		}	
 	?>
 	<style> .indent {padding-left: 2em} </style>
 	<div class="wrap">
 	<?php screen_icon( 'plugins' ); ?>
 	<h2>Disable Comments</h2>
-	<?php if( $this->networkactive ) echo '<div class="updated fade"><p><em>Disable Comments</em> is Network Activated. The settings below will affect <strong>all sites</strong> in this network.</p></div>';?>
+	<?php 
+	if( $this->networkactive ) 
+		echo '<div class="updated"><p><em>Disable Comments</em> is Network Activated. The settings below will affect <strong>all sites</strong> in this network.</p></div>';
+	if( WP_CACHE )
+		echo '<div class="updated"><p>It seems that a caching/performance plugin is active on this site. Please manually invalidate that plugin\'s cache after making any changes to the settings below.</p></div>';
+	?>
 	<form action="" method="post" id="disable-comments">
 	<p>Globally disable comments on:</p>
 	<ul class="indent">
