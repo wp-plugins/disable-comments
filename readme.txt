@@ -45,7 +45,24 @@ Go to the edit page for the post you want to disable comments on. Scroll down to
 
 You can also bulk-edit the comment status of multiple posts from the [posts screen](http://codex.wordpress.org/Posts_Screen).
 
+== Details ==
+
+The plugin provides the option to **completely disable the commenting feature in WordPress**. When this option is selected, the following changes are made:
+
+* All "Comments" links are hidden from the Admin Menu and Admin Bar;
+* All comment-related sections ("Recent Comments", "Discussion" etc.) are hidden from the WordPress Dashboard;
+* All comment-related widgets are disabled (so your theme cannot use them);
+* The "Discussion" settings page is hidden;
+* All comment RSS/Atom feeds are disabled (and requests for these will be redirected to the parent post);
+* The X-Pingback HTTP header is removed from all pages;
+* Outgoing pingbacks are disabled.
+
 == Changelog ==
+
+= 0.8 =
+* Remove X-Pingback header when comments are completely disabled.
+* Disable comment feeds when comment are completely disabled.
+* Simplified settings page.
 
 = 0.7 =
 * Now supports Network Activation - disable comments on your entire multi-site network.

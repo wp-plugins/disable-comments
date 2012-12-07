@@ -3,7 +3,7 @@
 Plugin Name: Disable Comments
 Plugin URI: http://wordpress.org/extend/plugins/disable-comments/
 Description: Allows administrators to globally disable comments on their site. Comments can be disabled according to post type.
-Version: 0.7
+Version: 0.8
 Author: Samir Shah
 Author URI: http://rayofsolaris.net/
 License: GPL2
@@ -56,8 +56,11 @@ class Disable_Comments {
 		}
 		
 		// these need to happen now
-		if( $this->options['remove_everywhere'] )
+		if( $this->options['remove_everywhere'] ) {
 			add_action( 'widgets_init', array( $this, 'disable_rc_widget' ) );
+			add_filter( 'wp_headers', array( $this, 'filter_wp_headers' ) );
+			add_action( 'template_redirect', array( $this, 'filter_query' ), 9 );	// before redirect_canonical
+		}
 		
 		// these can happen later
 		add_action( 'wp_loaded', array( $this, 'setup_filters' ) );	
@@ -114,7 +117,24 @@ class Disable_Comments {
 				add_action( 'admin_menu', array( $this, 'filter_admin_menu' ), 9999 );	// do this as late as possible
 				add_action( 'admin_head', array( $this, 'hide_discussion_rightnow' ) );
 				add_action( 'wp_dashboard_setup', array( $this, 'filter_dashboard' ) );
+				add_filter( 'pre_option_default_pingback_flag', '__return_zero' );
 			}
+		}
+	}
+	
+	function filter_wp_headers( $headers ) {
+		unset( $headers['X-Pingback'] );
+		return $headers;
+	}
+	
+	function filter_query() {
+		if( is_comment_feed() ) {
+			if( isset( $_GET['feed'] ) ) {
+				wp_redirect( remove_query_arg( 'feed' ), 301 );
+				exit;
+			}
+
+			set_query_var( 'feed', '' );	// redirect_canonical will do the rest
 		}
 	}
 	
@@ -177,7 +197,7 @@ jQuery(document).ready(function($){
 	
 	function filter_comment_status( $open, $post_id ) {
 		$post = get_post( $post_id );
-		return in_array( $post->post_type, $this->options['disabled_post_types'] ) ? false : $open;
+		return ( $this->options['remove_everywhere'] || in_array( $post->post_type, $this->options['disabled_post_types'] ) ) ? false : $open;
 	}
 	
 	function disable_rc_widget() {
@@ -202,15 +222,21 @@ jQuery(document).ready(function($){
 		}
 		
 		if ( isset( $_POST['submit'] ) ) {
-			$disabled_post_types =  empty( $_POST['disabled_types'] ) ? array() : (array) $_POST['disabled_types'];
-			$disabled_post_types = array_intersect( $disabled_post_types, array_keys( $types ) );	
+			$this->options['remove_everywhere'] = ( $_POST['mode'] == 'remove_everywhere' );
+			
+			if( $this->options['remove_everywhere'] )
+				$disabled_post_types = array_keys( $types );
+			else
+				$disabled_post_types =  empty( $_POST['disabled_types'] ) ? array() : (array) $_POST['disabled_types'];
+
+			$disabled_post_types = array_intersect( $disabled_post_types, array_keys( $types ) );
+			
 			// entering permanent mode, or post types have changed
 			if( !empty( $_POST['permanent'] ) && ( !$this->options['permanent'] || $disabled_post_types != $this->options['disabled_post_types'] ) )
 				$this->enter_permanent_mode();
 			
 			$this->options['disabled_post_types'] = $disabled_post_types;
-			foreach( array( 'remove_everywhere', 'permanent' ) as $v )
-				$this->options[$v] = !empty( $_POST[$v] );	
+			$this->options['permanent'] = isset( $_POST['permanent'] );
 			
 			$this->update_options();
 			echo '<div id="message" class="updated"><p>Options updated. Changes to the Admin Menu and Admin Bar will not appear until you leave or reload this page.' . ( WP_CACHE ? ' <strong>If a caching/performance plugin is active, please invalidate its cache to ensure that changes are reflected immediately.</strong>' : '' ) . '</p></div>';
@@ -227,27 +253,21 @@ jQuery(document).ready(function($){
 		echo '<div class="updated"><p>It seems that a caching/performance plugin is active on this site. Please manually invalidate that plugin\'s cache after making any changes to the settings below.</p></div>';
 	?>
 	<form action="" method="post" id="disable-comments">
-	<p>Globally disable comments on:</p>
-	<ul class="indent">
-		<?php foreach( $types as $k => $v ) echo "<li><label for='post-type-$k'><input type='checkbox' name='disabled_types[]' value='$k' ". checked( in_array( $k, $this->options['disabled_post_types'] ), true, false ) ." id='post-type-$k'> {$v->labels->name}</label></li>";?>
-	</ul>
-	<p><strong>Note:</strong> disabling comments will also disable trackbacks and pingbacks. All comment-related fields will also be hidden from the edit/quick-edit screens of the affected posts. These settings cannot be overridden for individual posts.</p>
+	<ul>
+	<li><label for="remove_everywhere"><input type="radio" id="remove_everywhere" name="mode" value="remove_everywhere" <?php checked( $this->options['remove_everywhere'] );?> /> <strong>Everywhere</strong>, and disable all comment-related controls and settings in WordPress.</label>
+		<p class="indent"><strong style="color: #900">Warning:</strong> this option is global and will affect your entire site. Use it only if you want to disable comments <em>everywhere</em>. A complete description of what this option does is <a href="http://wordpress.org/extend/plugins/disable-comments/details/" target="_blank">available here</a>.</p>
+	</li>
+	<li><label for="selected_types"><input type="radio" id="selected_types" name="mode" value="selected_types" <?php checked( ! $this->options['remove_everywhere'] );?> /> <strong>On certain post types</strong>:
+		<p></p>
+		<ul class="indent" id="listoftypes">
+			<?php foreach( $types as $k => $v ) echo "<li><label for='post-type-$k'><input type='checkbox' name='disabled_types[]' value='$k' ". checked( in_array( $k, $this->options['disabled_post_types'] ), true, false ) ." id='post-type-$k'> {$v->labels->name}</label></li>";?>
+		</ul>
+		<p class="indent">Disabling comments will also disable trackbacks and pingbacks. All comment-related fields will also be hidden from the edit/quick-edit screens of the affected posts. These settings cannot be overridden for individual posts.</p>
+	</li>
 	<h3>Other options</h3>
-	<ul class="indent">
-		<li><label for="remove_everywhere"><input type="checkbox" name="remove_everywhere" id="remove_everywhere" <?php checked( $this->options['remove_everywhere'] );?>> Remove all comment-related controls from WordPress</label></li>
-			<p>Selecting this option will remove the following:</p>
-			<ul class="indent" style="list-style: disc">
-			<li>The "Comments" link from the Admin Menu</li>
-			<li>The "Comments" icon from the Admin Bar</li>
-			<li>The "Recent Comments" Dashboard widget</li>
-			<li>The "Recent Comments" template widget (this prevents the widget from being available in <code>Appearance -> Widgets</code> and from being used by themes)</li>
-			<li>The "Discussion" section from the WordPress Dashboard <span class="hide-if-js"><strong>(Note: this requires Javascript to be enabled in the browser)</strong></span></li>
-			<li>The "Discussion Settings" page</strong></span></li>
-			</ul>
-			<p><strong>Note:</strong> this option is global. They will affect all users, everywhere, regardless of whether comments are enabled on portions of your site. Use it only if you want to remove all references to comments <em>everywhere</em>.</p>
-		</li>
-		<li><label for="permanent"><input type="checkbox" name="permanent" id="permanent" <?php checked( $this->options['permanent'] );?>> Use permanent mode (use only if normal mode doesn't work - see the <a href="http://wordpress.org/extend/plugins/disable-comments/faq/" target="_blank">FAQ</a> for what this means)</a></label>
-		<?php if( $this->networkactive ) echo '<p><strong>Warning:</strong> entering permanent mode on large multi-site networks requires a large number of database queries and can take a while. Use with caution!</p>';?>
+	<ul>
+		<li><label for="permanent"><input type="checkbox" name="permanent" id="permanent" <?php checked( $this->options['permanent'] );?>> Use permanent mode (use only if normal mode doesn't work - see the <a href="http://wordpress.org/extend/plugins/disable-comments/faq/" target="_blank">FAQ</a> for what this means)</a>.</label>
+		<?php if( $this->networkactive ) echo '<p class="indent"><strong>Warning:</strong> entering permanent mode on large multi-site networks requires a large number of database queries and can take a while. Use with caution!</p>';?>
 		</li>
 	</ul>
 	<p class="submit"><input class="button-primary" type="submit" name="submit" value="Update settings"></p>
@@ -255,9 +275,19 @@ jQuery(document).ready(function($){
 	</div>
 	<script>
 	jQuery(document).ready(function($){
+		function disable_comments_uihelper(){
+			if( $("#remove_everywhere").is(":checked") )
+				$("#listoftypes").css("color", "#888").find(":input").attr("disabled", true );
+			else
+				$("#listoftypes").css("color", "#000").find(":input").attr("disabled", false );
+		}
+		
 		$("#disable-comments :input").change(function(){
 			$("#message").slideUp();
+			disable_comments_uihelper();
 		});
+		
+		disable_comments_uihelper();
 	});
 	</script>
 <?php
