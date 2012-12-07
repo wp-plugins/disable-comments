@@ -255,7 +255,7 @@ jQuery(document).ready(function($){
 	<form action="" method="post" id="disable-comments">
 	<ul>
 	<li><label for="remove_everywhere"><input type="radio" id="remove_everywhere" name="mode" value="remove_everywhere" <?php checked( $this->options['remove_everywhere'] );?> /> <strong>Everywhere</strong>, and disable all comment-related controls and settings in WordPress.</label>
-		<p class="indent"><strong style="color: #900">Warning:</strong> this option is global and will affect your entire site. Use it only if you want to disable comments <em>everywhere</em>. A complete description of what this option does is <a href="http://wordpress.org/extend/plugins/disable-comments/details/" target="_blank">available here</a>.</p>
+		<p class="indent"><strong style="color: #900">Warning:</strong> this option is global and will affect your entire site. Use it only if you want to disable comments <em>everywhere</em>. A complete description of what this option does is <a href="http://wordpress.org/extend/plugins/disable-comments/other_notes/" target="_blank">available here</a>.</p>
 	</li>
 	<li><label for="selected_types"><input type="radio" id="selected_types" name="mode" value="selected_types" <?php checked( ! $this->options['remove_everywhere'] );?> /> <strong>On certain post types</strong>:
 		<p></p>
