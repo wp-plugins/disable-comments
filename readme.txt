@@ -57,6 +57,8 @@ The plugin provides the option to **completely disable the commenting feature in
 * The X-Pingback HTTP header is removed from all pages;
 * Outgoing pingbacks are disabled.
 
+**Please delete any existing comments on your site before applying this setting, otherwise (depending on your theme) those comments may still be displayed to visitors.**
+
 == Changelog ==
 
 = 0.8 =
