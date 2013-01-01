@@ -108,7 +108,8 @@ class Disable_Comments {
 
 			add_action( 'admin_print_footer_scripts', array( $this, 'discussion_notice' ) );
 			
-			if( !$this->options['permanent'] ) {
+			// if only certain types are disabled, remember the original post status
+			if( !$this->options['permanent'] && !$this->options['remove_everywhere'] ) {
 				add_action( 'edit_form_advanced', array( $this, 'edit_form_inputs' ) );
 				add_action( 'edit_page_form', array( $this, 'edit_form_inputs' ) );
 			}
