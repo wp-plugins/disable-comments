@@ -19,17 +19,19 @@ If you come across any bugs or have suggestions, please use the plugin support f
 
 == Frequently Asked Questions ==
 
-= Nothing happens after I disable comments on all posts - comment forms still appear when I view my posts. =
-
-This is because your theme is not checking the comment status of posts in the correct way. The solution is to switch the plugin to permanent mode (the last option on the plugin settings page).
-
-You may like to point your theme's author to [this explanation](http://rayofsolaris.net/blog/2012/how-to-check-if-comments-are-allowed-in-wordpress) of what they are doing wrong, and how to fix it.
-
 = What is "permanent mode"? =
 
 By default, the plugin does not make any permanent changes to your posts - it just dynamically closes comments on them. This means that you can use the plugin temporarily without permanently altering the comment status of all your posts. If the plugin works in this mode, then I recommend that you don't use permanent mode.
 
 Unfortunately some themes do not properly check the comment status of posts, and the plugin in default mode will have no effect with them (comments will still appear to be open). To fix this, switch to permanent mode. Note however that this will make permanent changes: **comments will remain closed even if you later disable the plugin** (you can always reopen them manually, of course).
+
+**I repeat, using permanent mode will make persistent changes to your database. DO NOT USE IT IF YOU WANT TO DISABLE COMMENTS TEMPORARILY.**
+
+= Nothing happens after I disable comments on all posts - comment forms still appear when I view my posts. =
+
+This is because your theme is not checking the comment status of posts in the correct way. The solution is to switch the plugin to permanent mode (the last option on the plugin settings page).
+
+You may like to point your theme's author to [this explanation](http://rayofsolaris.net/blog/2012/how-to-check-if-comments-are-allowed-in-wordpress) of what they are doing wrong, and how to fix it.
 
 = How can I remove the text that says "comments are closed" at the bottom of articles where comments are disabled? =
 

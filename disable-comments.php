@@ -267,7 +267,7 @@ jQuery(document).ready(function($){
 	</li>
 	<h3>Other options</h3>
 	<ul>
-		<li><label for="permanent"><input type="checkbox" name="permanent" id="permanent" <?php checked( $this->options['permanent'] );?>> Use permanent mode (use only if normal mode doesn't work - see the <a href="http://wordpress.org/extend/plugins/disable-comments/faq/" target="_blank">FAQ</a> for what this means)</a>.</label>
+		<li><label for="permanent"><input type="checkbox" name="permanent" id="permanent" <?php checked( $this->options['permanent'] );?>> Use permanent mode</label><p class="indent"><strong style="color:#900">Warning:</strong> this will make persistent changes to your database. <strong>Please read and understand the <a href="http://wordpress.org/extend/plugins/disable-comments/faq/" target="_blank">FAQ</a> before selecting this option</strong></a>.</p>
 		<?php if( $this->networkactive ) echo '<p class="indent"><strong>Warning:</strong> entering permanent mode on large multi-site networks requires a large number of database queries and can take a while. Use with caution!</p>';?>
 		</li>
 	</ul>
@@ -289,6 +289,11 @@ jQuery(document).ready(function($){
 		});
 		
 		disable_comments_uihelper();
+		
+		$("#permanent").change( function() {
+			if( $(this).is(":checked") && ! confirm("Warning: permanent mode will make persistent changes to your database. Are you sure you want to enable it?") )
+				$(this).attr("checked", false );
+		});
 	});
 	</script>
 <?php
