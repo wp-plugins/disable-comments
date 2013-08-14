@@ -3,7 +3,7 @@
 Plugin Name: Disable Comments
 Plugin URI: http://wordpress.org/extend/plugins/disable-comments/
 Description: Allows administrators to globally disable comments on their site. Comments can be disabled according to post type.
-Version: 0.9.2
+Version: 1.0
 Author: Samir Shah
 Author URI: http://rayofsolaris.net/
 License: GPL2
@@ -125,6 +125,17 @@ class Disable_Comments {
 				add_filter( 'pre_option_default_pingback_flag', '__return_zero' );
 			}
 		}
+		// Filters for front end only
+		else {
+			if( $this->options['remove_everywhere'] ) {
+				// Kill the comments template. This will deal with themes that don't check comment stati properly!
+				add_filter( 'comments_template', array( $this, 'dummy_comments_template' ), 20 );
+			}
+		}
+	}
+
+	function dummy_comments_template() {
+		return dirname( __FILE__ ) . '/comments-template.php';
 	}
 	
 	function filter_wp_headers( $headers ) {
@@ -192,7 +203,12 @@ jQuery(document).ready(function($){
 			echo '<div class="updated fade"><p>' . sprintf( __( 'The <em>Disable Comments</em> plugin is active, but isn\'t configured to do anything yet. Visit the <a href="%s">configuration page</a> to choose which post types to disable comments on.', 'disable-comments'), $url ) . '</p></div>';
 	}
 	
-	function filter_admin_menu(){
+	function filter_admin_menu(){		
+		global $pagenow;
+
+		if ( $pagenow == 'comment.php' || $pagenow == 'edit-comments.php' || $pagenow == 'options-discussion.php' )
+			wp_die( __( 'Comments are closed.' ), '', array( 'response' => 403 ) );
+
 		remove_menu_page( 'edit-comments.php' );
 		remove_submenu_page( 'options-general.php', 'options-discussion.php' );
 	}
