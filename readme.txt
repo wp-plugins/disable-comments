@@ -20,7 +20,7 @@ If you come across any bugs or have suggestions, please use the plugin support f
 
 Want to contribute? Here's the [GitHub development repository](https://github.com/solarissmoke/disable-comments).
 
-Thanks to the following people for contributing translations of this plugin: French - [Murat](http://wptheme.fr), German - [Christian Foellmann](http://foe-services.de).
+Thanks to the following people for contributing translations of this plugin: French - [Murat](http://wptheme.fr), German - [Christian Foellmann](http://foe-services.de), Indonesian - [Nasrulhaq Muiz](http://al-badar.net).
 
 == Frequently Asked Questions ==
 
@@ -73,6 +73,9 @@ The plugin provides the option to **completely disable the commenting feature in
 **Please delete any existing comments on your site before applying this setting, otherwise (depending on your theme) those comments may still be displayed to visitors.**
 
 == Changelog ==
+
+= 1.0.3 =
+* Compatibility fix for WordPress 3.8
 
 = 1.0.2 =
 * Disable comment-reply script for themes that don't check comment status properly.
